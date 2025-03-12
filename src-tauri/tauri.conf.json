@@ -12,9 +12,11 @@
   "app": {
     "windows": [
       {
-        "title": "pomodoro-desktop",
+        "title": "Pomodoro Desktop",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "minWidth": 400,
+        "minHeight": 320
       }
     ],
     "security": {
