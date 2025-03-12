@@ -2,6 +2,7 @@ import { Signal, signal } from "@preact/signals";
 
 export class PomodoroClass {
   readonly time: Signal<number>;
+  readonly pomodoros: Signal<number>;
   private workingTime: number;
   private restingTime: number;
   readonly paused: Signal<boolean>;
@@ -10,6 +11,7 @@ export class PomodoroClass {
   constructor() {
     this.workingTime = 3;
     this.restingTime = 1;
+    this.pomodoros = signal(0);
     this.paused = signal(false);
     this.isWorking = signal(true);
     this.time = signal(this.workingTime);

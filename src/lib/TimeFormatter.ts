@@ -1,3 +1,9 @@
+export enum TimeFormats {
+  Seconds = "Seconds",
+  Minutes = "Minutes",
+  Hours = "Hours",
+}
+
 export const TimeFormatter = (t: number) => {
   const addZero = (t: number) => (t < 10 ? `0${t}` : t);
 
