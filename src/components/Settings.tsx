@@ -2,7 +2,7 @@ import { CloseIcon } from "../assets/icons/CloseIcon";
 import { createPortal } from "preact/compat";
 import { Signal, signal, useSignal } from "@preact/signals";
 import { Pomodoro } from "../lib/Pomodoro";
-
+import { WriteConfig } from "../lib/Configuration";
 export const isOpen = signal<boolean>(false);
 
 export const toggleSettings = () => {
@@ -31,7 +31,7 @@ const SettingsMenu = () => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const data = {
       workingTime: workingInput.value,
       restingTime: restingInput.value,
@@ -39,10 +39,11 @@ const SettingsMenu = () => {
       longRestingCycle: longRestingCycleInput.value,
     };
     Pomodoro.setData(data);
+    await WriteConfig(data);
   };
 
   return (
-    <div class="absolute w-full max-w-96 h-3/4 max-h-max p-6 rounded-2xl top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 bg-white/75 shadow-xl shadow-gray-700/25 backdrop-blur-md overflow-y-hidden">
+    <div class="absolute flex flex-col w-full max-w-96 h-3/4 max-h-max p-6 rounded-2xl top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2 bg-white/75 shadow-xl shadow-gray-700/25 backdrop-blur-md overflow-y-hidden">
       <CloseIcon
         onClick={() => toggleSettings()}
         class="absolute w-6 h-6 fill-black hover:fill-gray-700 cursor-pointer right-4 top-4"
@@ -92,9 +93,9 @@ const SettingsMenu = () => {
       </div>
       <button
         onClick={handleSubmit}
-        class="font-medium mt-4 py-1 px-4 border-2 rounded-lg w-max h-max self-center hover:bg-gray-700 hover:border-gray-700 hover:text-white transition-colors duration-100"
+        class="font-medium self-center mt-4 py-1 px-4 border-2 rounded-lg w-max h-max hover:bg-gray-700 hover:border-gray-700 hover:text-white text-center transition-colors duration-100 cursor-pointer"
       >
-        Apply
+        Save
       </button>
     </div>
   );

@@ -1,5 +1,6 @@
 import { Signal, signal } from "@preact/signals";
 import { data } from "../types/Settings";
+import { ReadConfig } from "./Configuration";
 
 export class PomodoroClass {
   private workingTime: number;
@@ -57,6 +58,12 @@ export class PomodoroClass {
     this.longRestingCycle.value = data.longRestingCycle;
     this.longRestingCycleCopy = data.longRestingCycle;
     this.resetTimer();
+  };
+
+  fetchConfig = async () => {
+    const config = await ReadConfig();
+    if (!config) return;
+    this.setData(config);
   };
 
   private switchState = () => {

@@ -7,8 +7,17 @@ import { SettingsIcon } from "./assets/icons/SettingsIcon";
 import { Pomodoro } from "./lib/Pomodoro";
 import { TimeFormatter } from "./lib/TimeFormatter";
 import { toggleSettings, Settings, isOpen } from "./components/Settings";
+import { useEffect } from "preact/hooks";
 
 function App() {
+  useEffect(() => {
+    Pomodoro.fetchConfig()
+      .then(() => console.log("Data loaded successfull"))
+      .catch(() => {
+        console.log("Data coudn't load.");
+      });
+  }, []);
+
   return (
     <>
       <main class="w-screen h-screen flex flex-col items-center justify-center gap-6 p-6 overflow-y-hidden">
@@ -17,7 +26,7 @@ function App() {
           class="absolute top-6 right-6 w-8 h-8 stroke-black hover:stroke-gray-700 transition-colors cursor-pointer select-none"
         />
         <section class="h-max w-full max-w-4xl flex flex-col justify-center items-center overflow-hidden">
-          <span class="font-medium">
+          <span class="font-medium select-none">
             {Pomodoro.isWorking.value
               ? "It's time to work!"
               : "It's time to take a break"}
@@ -59,7 +68,9 @@ function App() {
             {`You have completed ${Pomodoro.getData()["pomodoros"]} pomodoros`}
           </span>
           <span class="hidden group-hover:block text-lg absolute -bottom-6 cursor-default">
-            Next long rest in 1 pomodoro
+            {`Next Long Rest in ${
+              Pomodoro.getData()["longRestingCycle"]
+            } pomodoros`}
           </span>
         </section>
       </main>
