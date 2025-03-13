@@ -11,7 +11,7 @@ import { toggleSettings, Settings, isOpen } from "./components/Settings";
 function App() {
   return (
     <>
-      <main class="w-screen h-screen flex flex-col items-center justify-center gap-6 p-6">
+      <main class="w-screen h-screen flex flex-col items-center justify-center gap-6 p-6 overflow-y-hidden">
         <SettingsIcon
           onClick={toggleSettings}
           class="absolute top-6 right-6 w-8 h-8 stroke-black hover:stroke-gray-700 transition-colors cursor-pointer select-none"
@@ -30,19 +30,33 @@ function App() {
           </span>
         </section>
         <section class="w-max max-w-96 h-12 flex justify-center items-center *:fill-black *:hover:fill-gray-700 *:select-none *:cursor-pointer">
-          <RestartIcon onClick={Pomodoro.resetTimer} class="w-auto h-full" />
+          <RestartIcon
+            title="Restart"
+            onClick={Pomodoro.resetTimer}
+            class="w-auto h-full"
+          />
           {Pomodoro.paused.value ? (
-            <PauseIcon onClick={Pomodoro.togglePause} class="w-auto h-full" />
+            <PauseIcon
+              title="Play"
+              onClick={Pomodoro.togglePause}
+              class="w-auto h-full"
+            />
           ) : (
-            <PlayIcon onClick={Pomodoro.togglePause} class="w-auto h-full" />
+            <PlayIcon
+              title="Pause"
+              onClick={Pomodoro.togglePause}
+              class="w-auto h-full"
+            />
           )}
-          <NextIcon onClick={Pomodoro.skipState} class="w-auto h-full" />
+          <NextIcon
+            title="Skip"
+            onClick={Pomodoro.skipState}
+            class="w-auto h-full"
+          />
         </section>
         <section class="absolute bottom-6 w-full max-w-96 flex flex-col justify-center items-center group">
           <span class="font-medium text-lg cursor-default">
-            {Pomodoro.pomodoros.value >= 0
-              ? `Let's work today!`
-              : `You have completed ${Pomodoro.pomodoros.value}`}
+            {`You have completed ${Pomodoro.getData()["pomodoros"]} pomodoros`}
           </span>
           <span class="hidden group-hover:block text-lg absolute -bottom-6 cursor-default">
             Next long rest in 1 pomodoro
