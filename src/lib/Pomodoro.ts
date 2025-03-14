@@ -14,9 +14,9 @@ export class PomodoroClass {
   readonly time: Signal<number>;
 
   constructor() {
-    this.workingTime = 25;
-    this.restingTime = 5;
-    this.longRestingTime = 10;
+    this.workingTime = 1200;
+    this.restingTime = 300;
+    this.longRestingTime = 900;
     this.longRestingCycleCopy = 3;
     this.longRestingCycle = signal(this.longRestingCycleCopy);
     this.pomodoros = signal(0);

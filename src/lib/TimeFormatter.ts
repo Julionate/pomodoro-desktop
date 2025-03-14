@@ -13,3 +13,25 @@ export const TimeFormatter = (t: number) => {
 
   return `${addZero(h)}:${addZero(m)}:${addZero(s)}`;
 };
+
+export const TimeConverter = (
+  time: number,
+  from: TimeFormats,
+  to: TimeFormats
+): number => {
+  const conversionRates: Record<TimeFormats, number> = {
+    [TimeFormats.Hours]: 3600,
+    [TimeFormats.Minutes]: 60,
+    [TimeFormats.Seconds]: 1,
+  };
+
+  return (time * conversionRates[from]) / conversionRates[to];
+};
+
+export const secondsToMinutes = (input: number) => {
+  return TimeConverter(input, TimeFormats.Seconds, TimeFormats.Minutes);
+};
+
+export const minutesToSeconds = (input: number) => {
+  return TimeConverter(input, TimeFormats.Minutes, TimeFormats.Seconds);
+};
