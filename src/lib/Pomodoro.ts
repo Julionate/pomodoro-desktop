@@ -1,6 +1,7 @@
 import { Signal, signal } from "@preact/signals";
 import { data } from "../types/Settings";
 import { ReadConfig } from "./Configuration";
+import { Sound } from "./Sound";
 
 export class PomodoroClass {
   private workingTime: number;
@@ -76,6 +77,10 @@ export class PomodoroClass {
     }
   };
 
+  private playAudio = () => {
+    !this.isWorking.value ? Sound.workAudio.play() : Sound.breakAudio.play();
+  };
+
   private longBreakHandle = () => {
     this.longRestingCycle.value -= 1;
     if (this.longRestingCycle.value <= 0) {
@@ -97,6 +102,7 @@ export class PomodoroClass {
             : this.restingTime
           : this.workingTime;
         this.addPomodoro();
+        this.playAudio();
         this.switchState();
       }
     }, 1000);
