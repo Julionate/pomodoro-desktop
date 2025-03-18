@@ -7,6 +7,7 @@ export class PomodoroClass {
   private workingTime: number;
   private restingTime: number;
   private longRestingTime: number;
+  private autoStart: Signal<"enabled" | "disabled">;
   private longRestingCycle: Signal<number>;
   private longRestingCycleCopy: number;
   private pomodoros: Signal<number>;
@@ -18,6 +19,7 @@ export class PomodoroClass {
     this.workingTime = 1200;
     this.restingTime = 300;
     this.longRestingTime = 900;
+    this.autoStart = signal("enabled");
     this.longRestingCycleCopy = 3;
     this.longRestingCycle = signal(this.longRestingCycleCopy);
     this.pomodoros = signal(0);
@@ -49,6 +51,7 @@ export class PomodoroClass {
       longRestingTime: this.longRestingTime,
       longRestingCycle: this.longRestingCycle.value,
       pomodoros: this.pomodoros.value,
+      autoStart: this.autoStart.value,
     };
   };
 
@@ -58,6 +61,7 @@ export class PomodoroClass {
     this.longRestingTime = data.longRestingTime;
     this.longRestingCycle.value = data.longRestingCycle;
     this.longRestingCycleCopy = data.longRestingCycle;
+    this.autoStart.value = data.autoStart;
     this.resetTimer();
   };
 
@@ -75,6 +79,12 @@ export class PomodoroClass {
     if (this.isWorking.value) {
       this.pomodoros.value += 1;
     }
+  };
+
+  autoStartHandler = () => {
+    this.autoStart.value === "enabled"
+      ? (this.paused.value = true)
+      : (this.paused.value = false);
   };
 
   private playAudio = () => {
@@ -96,6 +106,7 @@ export class PomodoroClass {
       if (this.time.value > 0 && this.paused.value) {
         this.time.value -= 1;
       } else if (this.time.value <= 0 && this.paused.value) {
+        this.autoStartHandler();
         this.time.value = this.isWorking.value
           ? this.longBreakHandle()
             ? this.longRestingTime

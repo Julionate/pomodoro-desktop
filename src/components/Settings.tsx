@@ -11,16 +11,27 @@ export const toggleSettings = () => {
 };
 
 const SettingsMenu = () => {
-  const { workingTime, restingTime, longRestingTime, longRestingCycle } =
-    Pomodoro.getData();
+  const {
+    workingTime,
+    restingTime,
+    longRestingTime,
+    longRestingCycle,
+    autoStart,
+  } = Pomodoro.getData();
 
-  const [workingInput, restingInput, longRestingInput, longRestingCycleInput] =
-    [
-      useSignal<number>(secondsToMinutes(workingTime)),
-      useSignal<number>(secondsToMinutes(restingTime)),
-      useSignal<number>(secondsToMinutes(longRestingTime)),
-      useSignal<number>(longRestingCycle),
-    ];
+  const [
+    workingInput,
+    restingInput,
+    longRestingInput,
+    longRestingCycleInput,
+    autoStartInput,
+  ] = [
+    useSignal<number>(secondsToMinutes(workingTime)),
+    useSignal<number>(secondsToMinutes(restingTime)),
+    useSignal<number>(secondsToMinutes(longRestingTime)),
+    useSignal<number>(longRestingCycle),
+    useSignal<"enabled" | "disabled">(autoStart),
+  ];
 
   const handleOnInput = (e: Event, Signal: Signal<number>) => {
     const target = e.target as HTMLInputElement;
@@ -38,9 +49,17 @@ const SettingsMenu = () => {
       restingTime: minutesToSeconds(restingInput.value),
       longRestingTime: minutesToSeconds(longRestingInput.value),
       longRestingCycle: longRestingCycleInput.value,
+      autoStart: autoStartInput.value,
     };
     Pomodoro.setData(data);
     await WriteConfig(data);
+  };
+
+  const validateSelection = (value: string) => {
+    if (value === "enabled" || value === "disabled") {
+      return value;
+    }
+    return "disabled";
   };
 
   return (
@@ -53,7 +72,7 @@ const SettingsMenu = () => {
       <div class="flex flex-col font-normal text-xl gap-3 h-1/2 max-h-max overflow-y-auto">
         <span class="font-medium">Time (Minutes)</span>
         <div class="flex justify-between">
-          <span>Working</span>
+          <label>Working</label>
           <input
             onInput={(e) => handleOnInput(e, workingInput)}
             type="number"
@@ -62,7 +81,7 @@ const SettingsMenu = () => {
           />
         </div>
         <div class="flex justify-between">
-          <span>Break</span>
+          <label>Break</label>
           <input
             onInput={(e) => handleOnInput(e, restingInput)}
             type="number"
@@ -72,7 +91,7 @@ const SettingsMenu = () => {
           />
         </div>
         <div class="flex justify-between">
-          <span>Long break</span>
+          <label>Long break</label>
           <input
             onInput={(e) => handleOnInput(e, longRestingInput)}
             type="number"
@@ -82,7 +101,7 @@ const SettingsMenu = () => {
           />
         </div>
         <div class="flex justify-between">
-          <span>Long break cycles</span>
+          <label>Long break cycles</label>
           <input
             onInput={(e) => handleOnInput(e, longRestingCycleInput)}
             type="number"
@@ -90,6 +109,20 @@ const SettingsMenu = () => {
             min={0}
             class="max-w-18 h-8 pl-2 bg-black/5 hover:bg-black/10 rounded-md outline-none focus:border-2 border-black"
           />
+        </div>
+        <span class="font-medium">Pomodoro</span>
+        <div class="flex justify-between">
+          <label>Auto-start counter</label>
+          <select
+            onChange={(e) =>
+              (autoStartInput.value = validateSelection(e.currentTarget.value))
+            }
+            defaultValue={autoStartInput.value}
+            class="bg-black/5 pl-2 hover:bg-black/10 rounded-md outline-none"
+          >
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
         </div>
       </div>
       <button

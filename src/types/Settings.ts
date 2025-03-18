@@ -3,4 +3,5 @@ export interface data {
   restingTime: number;
   longRestingTime: number;
   longRestingCycle: number;
+  autoStart: "enabled" | "disabled";
 }
