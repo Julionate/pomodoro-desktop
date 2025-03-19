@@ -2,7 +2,7 @@ export class SoundClass {
   private path: string;
   private audio: HTMLAudioElement;
 
-  constructor(path: string = "/sounds/bamboo.mp3") {
+  constructor(path: string = "/sounds/warm_alarm.ogg") {
     this.path = path;
     this.audio = this.generateSoundObject();
   }
@@ -22,7 +22,7 @@ export class SoundController {
 
   constructor() {
     this.workAudio = new SoundClass();
-    this.breakAudio = new SoundClass("/sounds/ding.mp3");
+    this.breakAudio = new SoundClass("/sounds/magic_bell.ogg");
   }
 }
 

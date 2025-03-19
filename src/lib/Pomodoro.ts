@@ -19,7 +19,7 @@ export class PomodoroClass {
     this.workingTime = 1200;
     this.restingTime = 300;
     this.longRestingTime = 900;
-    this.autoStart = signal("enabled");
+    this.autoStart = signal("disabled");
     this.longRestingCycleCopy = 3;
     this.longRestingCycle = signal(this.longRestingCycleCopy);
     this.pomodoros = signal(0);
