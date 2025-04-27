@@ -4,4 +4,5 @@ export interface data {
   longRestingTime: number;
   longRestingCycle: number;
   autoStart: "enabled" | "disabled";
+  enableNotifications: "enabled" | "disabled";
 }

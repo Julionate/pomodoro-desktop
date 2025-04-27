@@ -4,6 +4,7 @@ import { Signal, signal, useSignal } from "@preact/signals";
 import { Pomodoro } from "../lib/Pomodoro";
 import { WriteConfig } from "../lib/Configuration";
 import { secondsToMinutes, minutesToSeconds } from "../lib/TimeFormatter";
+import { Notification } from "../lib/Notifications";
 export const isOpen = signal<boolean>(false);
 
 export const toggleSettings = () => {
@@ -25,12 +26,14 @@ const SettingsMenu = () => {
     longRestingInput,
     longRestingCycleInput,
     autoStartInput,
+    enableNotificationsInput,
   ] = [
     useSignal<number>(secondsToMinutes(workingTime)),
     useSignal<number>(secondsToMinutes(restingTime)),
     useSignal<number>(secondsToMinutes(longRestingTime)),
     useSignal<number>(longRestingCycle),
     useSignal<"enabled" | "disabled">(autoStart),
+    useSignal<"enabled" | "disabled">(Notification.getEnabledStatus()),
   ];
 
   const handleOnInput = (e: Event, Signal: Signal<number>) => {
@@ -50,8 +53,10 @@ const SettingsMenu = () => {
       longRestingTime: minutesToSeconds(longRestingInput.value),
       longRestingCycle: longRestingCycleInput.value,
       autoStart: autoStartInput.value,
+      enableNotifications: enableNotificationsInput.value,
     };
     Pomodoro.setData(data);
+    Notification.setConfiguration(data.enableNotifications);
     await WriteConfig(data);
   };
 
@@ -118,6 +123,21 @@ const SettingsMenu = () => {
               (autoStartInput.value = validateSelection(e.currentTarget.value))
             }
             defaultValue={autoStartInput.value}
+            class="bg-black/5 pl-2 hover:bg-black/10 rounded-md outline-none"
+          >
+            <option value="enabled">Enabled</option>
+            <option value="disabled">Disabled</option>
+          </select>
+        </div>
+        <div class="flex justify-between">
+          <label>Notifications</label>
+          <select
+            onChange={(e) =>
+              (enableNotificationsInput.value = validateSelection(
+                e.currentTarget.value
+              ))
+            }
+            defaultValue={enableNotificationsInput.value}
             class="bg-black/5 pl-2 hover:bg-black/10 rounded-md outline-none"
           >
             <option value="enabled">Enabled</option>

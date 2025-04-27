@@ -8,6 +8,7 @@ import { Pomodoro } from "./lib/Pomodoro";
 import { TimeFormatter } from "./lib/TimeFormatter";
 import { toggleSettings, Settings, isOpen } from "./components/Settings";
 import { useEffect } from "preact/hooks";
+import { Notification } from "./lib/Notifications";
 
 function App() {
   useEffect(() => {
@@ -15,6 +16,12 @@ function App() {
       .then(() => console.log("Data loaded successfull"))
       .catch(() => {
         console.log("Data coudn't load.");
+      });
+
+    Notification.fetchConfig()
+      .then(() => console.log("Notification data loaded successfull"))
+      .catch(() => {
+        console.log("Data coudn't load");
       });
   }, []);
 

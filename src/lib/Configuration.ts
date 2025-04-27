@@ -18,12 +18,12 @@ export const WriteConfig = async (data: data) => {
   await file.close();
 };
 
-export const ReadConfig = async () => {
+export const ReadConfig = async (): Promise<data> => {
   const rawData = await readFile(CONFIG_PATH, {
     baseDir: BaseDirectory.AppConfig,
   });
   const data = decoder.decode(rawData);
-  const dataJSON = JSON.parse(data);
+  const dataJSON: data = JSON.parse(data);
 
   return dataJSON;
 };
