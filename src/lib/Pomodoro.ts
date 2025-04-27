@@ -2,6 +2,7 @@ import { Signal, signal } from "@preact/signals";
 import { data } from "../types/Settings";
 import { ReadConfig } from "./Configuration";
 import { Sound } from "./Sound";
+import { Notification } from "./Notifications";
 
 export class PomodoroClass {
   private workingTime: number;
@@ -72,7 +73,16 @@ export class PomodoroClass {
   };
 
   private switchState = () => {
+    const title = this.isWorking.value ? "Break time!" : "Work time!";
+    const message = this.isWorking.value
+      ? "Your work time is finished, let's take a break!"
+      : "Your rest time is finished, let's work!";
+
     this.isWorking.value = !this.isWorking.value;
+
+    Notification.sendNotification(title, message);
+
+    this.playAudio();
   };
 
   private addPomodoro = () => {
@@ -81,7 +91,7 @@ export class PomodoroClass {
     }
   };
 
-  autoStartHandler = () => {
+  private autoStartHandler = () => {
     this.autoStart.value === "enabled"
       ? (this.paused.value = true)
       : (this.paused.value = false);
@@ -113,7 +123,6 @@ export class PomodoroClass {
             : this.restingTime
           : this.workingTime;
         this.addPomodoro();
-        this.playAudio();
         this.switchState();
       }
     }, 1000);
